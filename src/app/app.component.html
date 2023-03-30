@@ -1,0 +1,58 @@
+<canvas id="canva" #canvas> </canvas>
+
+<nav class="header">
+  <h3 id="first">Your Patient's</h3>
+  <select class="userList" #user (change)="onUserClick(user.value)" >
+    <option selected disabled>Select Users</option>
+    <option *ngFor="let user of AllUser" [value]="user.id">
+      {{ user.userName }}
+    </option>
+  </select>
+  <i class="fa fa-search" (click)="openSearch()"></i>
+ </nav>
+
+<div class="container">
+  <div class="item modal-body">
+    <img #peak src="../assets/peakpx.jpg" width="200" height="200" alt="" />
+  </div>
+
+  <div class="item details" #contentType>
+    <form [formGroup]="contentForm">
+      <div formArrayName="contentArr">
+        <div *ngFor="let content of contents.controls; let i = index">
+          <div [formGroupName]="i">
+            {{ i + 1 }}
+            <input
+              type="text"
+              required
+              class="contentTxt"
+              formControlName="doctorContent"
+            />
+           </div>
+        </div>
+        <button id="save" *ngIf="contents.controls.length > 0 && !enableEdit" (click)="saveContent()">Save</button>
+        <button id="save" *ngIf="enableEdit" (click)="editContent()">Edit</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<div  id="modal" class="search-modal">
+
+  <span class="close" (click)="close()">&times;</span>
+
+  <div class="modal-head">
+    <input #search (keyup)="searchContent(search.value)" type="text">
+  </div>
+
+
+  <div class="search-body" style="margin:40px 7px;">
+      <div (click)="routeUser(item)" class="search-result" *ngFor="let item of ContentResults">
+            {{item.userName}}
+             <span> {{item.content}} </span>
+       </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>
